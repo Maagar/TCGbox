@@ -1,5 +1,6 @@
 package org.example.project
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
@@ -8,6 +9,9 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "TCGbox",
     ) {
-        App()
+        App(
+            darkTheme = isSystemInDarkTheme(),
+            dynamicColor = false
+        )
     }
 }

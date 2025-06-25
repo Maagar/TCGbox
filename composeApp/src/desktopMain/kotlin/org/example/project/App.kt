@@ -1,16 +1,25 @@
 package org.example.project
 
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
-import data.Presentation.screen.UserCardsScreen
+import androidx.compose.ui.Modifier
+import Presentation.screen.UserCardsScreen
+import androidx.compose.foundation.isSystemInDarkTheme
+import com.example.compose.AppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App() {
-    MaterialTheme {
+fun App(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = false,
+) {
+    AppTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
         val apiKey: String = System.getProperty("API_KEY") ?: "default_key"
-
-        UserCardsScreen()
+        Surface(modifier = Modifier.fillMaxSize()) {
+            UserCardsScreen()
+        }
     }
+
 }

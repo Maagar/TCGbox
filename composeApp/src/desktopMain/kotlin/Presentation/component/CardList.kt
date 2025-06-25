@@ -1,4 +1,4 @@
-package data.Presentation.component
+package Presentation.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
