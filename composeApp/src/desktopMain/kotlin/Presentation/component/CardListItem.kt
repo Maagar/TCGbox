@@ -27,7 +27,6 @@ import data.model.Card
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import util.openURL
-import kotlin.math.roundToInt
 
 @Composable
 fun CardListItem(card: Card) {
@@ -57,7 +56,8 @@ fun CardListItem(card: Card) {
             KamelImage(
                 { asyncPainterResource(data = card.imageSmall) },
                 contentDescription = null,
-                modifier = Modifier.size(72.dp).clickable(onClick = { showLargeImage = true }).pointerHoverIcon(PointerIcon.Hand),
+                modifier = Modifier.size(72.dp).clickable(onClick = { showLargeImage = true })
+                    .pointerHoverIcon(PointerIcon.Hand),
                 alignment = Alignment.Center,
                 contentScale = ContentScale.Fit,
                 alpha = DefaultAlpha,
@@ -65,16 +65,16 @@ fun CardListItem(card: Card) {
             )
         },
         trailingContent = {
-            val priceDifference = ((card.marketPrice - card.boughtPrice) * 100).roundToInt() / 100.0
+
+            val priceDifference = card.marketPrice - card.boughtPrice
             val sign = when {
                 priceDifference > 0 -> "+"
-                priceDifference < 0 -> "-"
                 else -> ""
             }
             Row {
-                Text("$${card.marketPrice}")
+                Text("$${card.marketPrice / 100.0}")
                 Text(
-                    text = " ($sign$priceDifference)",
+                    text = " ($sign${priceDifference / 100.0})",
                     color = when {
                         priceDifference > 0 -> Color.Green
                         priceDifference < 0 -> Color.Red

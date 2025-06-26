@@ -17,11 +17,12 @@ fun CardList() {
         id = "xy1",
         name = "Venusaur-EX",
         releaseDate = LocalDate(2014, 2, 5),
+        addedDate = LocalDate(2014, 2, 5),
         imageSmall = "https://images.pokemontcg.io/xy1/1.png",
         imageLarge = "https://images.pokemontcg.io/xy1/1_hires.png",
         tcgPlayerUrl = "https://prices.pokemontcg.io/tcgplayer/xy1-1",
-        marketPrice = 3.32,
-        boughtPrice = 2.5,
+        marketPrice = 332L,
+        boughtPrice = 400L,
     )
 
     LazyColumn(

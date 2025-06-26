@@ -1,0 +1,20 @@
+CREATE TABLE Cards(
+    id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    releaseDate TEXT NOT NULL,
+    addedDate TEXT NOT NULL,
+    imageSmall TEXT NOT NULL,
+    imageLarge TEXT NOT NULL,
+    tcgPlayerUrl TEXT NOT NULL,
+    marketPrice INTEGER NOT NULL,
+    boughtPrice INTEGER NOT NULL
+);
+
+getAllCards:
+SELECT Cards.*
+FROM Cards;
+
+insertCard:
+INSERT INTO Cards(id, name, releaseDate, addedDate, imageSmall, imageLarge, tcgPlayerUrl, marketPrice, boughtPrice)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+

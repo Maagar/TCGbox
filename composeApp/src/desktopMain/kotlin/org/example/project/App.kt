@@ -16,7 +16,6 @@ fun App(
     dynamicColor: Boolean = false,
 ) {
     AppTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
-        val apiKey: String = System.getProperty("API_KEY") ?: "default_key"
         Surface(modifier = Modifier.fillMaxSize()) {
             UserCardsScreen()
         }
