@@ -1,4 +1,4 @@
-package Presentation.component
+package Presentation.screen.userCards.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +20,7 @@ fun CardList() {
         addedDate = LocalDate(2014, 2, 5),
         imageSmall = "https://images.pokemontcg.io/xy1/1.png",
         imageLarge = "https://images.pokemontcg.io/xy1/1_hires.png",
-        tcgPlayerUrl = "https://prices.pokemontcg.io/tcgplayer/xy1-1",
+        cardmarketURL = "https://prices.pokemontcg.io/tcgplayer/xy1-1",
         marketPrice = 332L,
         boughtPrice = 400L,
     )
@@ -29,7 +29,7 @@ fun CardList() {
         modifier = Modifier.fillMaxWidth()
     ) {
         item {
-            CardListItem(card)
+
         }
     }
 }

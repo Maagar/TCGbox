@@ -23,20 +23,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import data.model.Card
+import data.api.model.ApiCard
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import util.openURL
 
 @Composable
-fun CardListItem(card: Card) {
+fun CardListItem(card: ApiCard, boughtPrice: Long? = null) {
 
     var showLargeImage by remember { mutableStateOf(false) }
 
     if (showLargeImage) {
         Popup(onDismissRequest = { showLargeImage = false }, properties = PopupProperties(focusable = true)) {
             KamelImage(
-                { asyncPainterResource(data = card.imageLarge) },
+                { asyncPainterResource(data = card.images.large) },
                 contentDescription = null,
                 modifier = Modifier.padding(40.dp).clickable { showLargeImage = false },
                 alignment = Alignment.Center,
@@ -54,7 +54,7 @@ fun CardListItem(card: Card) {
         },
         leadingContent = {
             KamelImage(
-                { asyncPainterResource(data = card.imageSmall) },
+                { asyncPainterResource(data = card.images.small) },
                 contentDescription = null,
                 modifier = Modifier.size(72.dp).clickable(onClick = { showLargeImage = true })
                     .pointerHoverIcon(PointerIcon.Hand),
@@ -66,29 +66,31 @@ fun CardListItem(card: Card) {
         },
         trailingContent = {
 
-            val priceDifference = card.marketPrice - card.boughtPrice
-            val sign = when {
-                priceDifference > 0 -> "+"
-                else -> ""
-            }
             Row {
-                Text("$${card.marketPrice / 100.0}")
-                Text(
-                    text = " ($sign${priceDifference / 100.0})",
-                    color = when {
-                        priceDifference > 0 -> Color.Green
-                        priceDifference < 0 -> Color.Red
-                        else -> Color.Black
+                Text("${card.cardmarket.prices.trendPrice / 100.0} €")
+                if (boughtPrice != null) {
+                    val priceDifference = card.cardmarket.prices.trendPrice - boughtPrice
+                    val sign = when {
+                        priceDifference > 0 -> "+"
+                        else -> ""
                     }
-                )
+                    Text(
+                        text = " ($sign${priceDifference / 100.0})",
+                        color = when {
+                            priceDifference > 0 -> Color.Green
+                            priceDifference < 0 -> Color.Red
+                            else -> MaterialTheme.colorScheme.onSurface
+                        }
+                    )
+                }
             }
 
         },
         supportingContent = {
             Text(
-                text = card.tcgPlayerUrl,
+                text = card.cardmarket.url,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable(onClick = { openURL(card.tcgPlayerUrl) })
+                modifier = Modifier.clickable(onClick = { openURL(card.cardmarket.url) })
                     .pointerHoverIcon(PointerIcon.Hand)
             )
         }

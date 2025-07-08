@@ -1,4 +1,4 @@
-package Presentation.component
+package Presentation.screen.userCards.component
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth

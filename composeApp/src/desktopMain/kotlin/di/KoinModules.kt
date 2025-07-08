@@ -1,6 +1,7 @@
 package di
 
-import Presentation.screen.UserCardsViewModel
+import Presentation.screen.addCards.AddCardsViewModel
+import Presentation.screen.userCards.UserCardsViewModel
 import data.api.KtorClient
 import data.api.PokemonApiService
 import data.repository.PokemonRepository
@@ -14,6 +15,7 @@ val appModule = module {
     single { PokemonApiService(get()) }
     single { PokemonRepository(get()) }
     viewModel { UserCardsViewModel(get()) }
+    viewModel { AddCardsViewModel(get()) }
 }
 
 fun initializeKoin() {

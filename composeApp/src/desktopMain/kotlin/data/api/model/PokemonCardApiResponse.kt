@@ -1,7 +1,31 @@
 package data.api.model
 
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+
+object DoubleToLongCentsSerializer : KSerializer<Long> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("DoubleToLongCents", PrimitiveKind.DOUBLE)
+
+    override fun deserialize(decoder: Decoder): Long {
+        val doubleValue = decoder.decodeDouble()
+        return (doubleValue * 100).toLong()
+    }
+
+    override fun serialize(encoder: Encoder, value: Long) {
+        val doubleValue = value / 100.0
+        encoder.encodeDouble(doubleValue)
+    }
+}
+
+@Serializable
+data class SearchCardsApiResponse(
+    val data: List<ApiCard>
+)
 
 @Serializable
 data class PokemonCardApiResponse(
@@ -14,7 +38,7 @@ data class ApiCard(
     val name: String,
     val images: ApiImages,
     val set: ApiSet,
-    val tcgplayer: ApiTcgPlayer
+    val cardmarket: CardMarket
 )
 
 @Serializable
@@ -29,18 +53,15 @@ data class ApiSet(
 )
 
 @Serializable
-data class ApiTcgPlayer(
+data class CardMarket(
     val url: String,
-    val prices: ApiTcgPlayerPrices
+    val prices: ApiCardMarketPrices
 )
 
 @Serializable
-data class ApiTcgPlayerPrices(
-    val holofoil: ApiHolofoilPrices
-)
-
-@Serializable
-data class ApiHolofoilPrices(
-    @SerialName("market")
-    val marketPriceApi: Double
+data class ApiCardMarketPrices(
+    @Serializable(with = DoubleToLongCentsSerializer::class)
+    val trendPrice: Long,
+    @Serializable(with = DoubleToLongCentsSerializer::class)
+    val reverseHoloTrend: Long
 )

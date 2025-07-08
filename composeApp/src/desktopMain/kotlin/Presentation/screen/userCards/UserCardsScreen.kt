@@ -1,4 +1,4 @@
-package Presentation.screen
+package Presentation.screen.userCards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import Presentation.component.CardList
-import Presentation.component.CardSearchBar
+import Presentation.screen.userCards.component.CardList
+import Presentation.screen.userCards.component.CardSearchBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState

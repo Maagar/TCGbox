@@ -34,6 +34,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.androidx.navigation)
             implementation("org.slf4j:slf4j-api:2.0.13")
             implementation("org.slf4j:slf4j-simple:2.0.13")
             implementation(libs.ktor.client.core)

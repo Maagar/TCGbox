@@ -8,10 +8,10 @@ data class Card (
     val id: String,
     val name: String,
     val releaseDate: LocalDate,
-    val addedDate: LocalDate,
+    val addedDate: LocalDate? = null,
     val imageSmall: String,
     val imageLarge: String,
-    val tcgPlayerUrl: String,
+    val cardmarketURL: String,
     val marketPrice: Long,
-    val boughtPrice: Long,
+    val boughtPrice: Long? = null,
     )

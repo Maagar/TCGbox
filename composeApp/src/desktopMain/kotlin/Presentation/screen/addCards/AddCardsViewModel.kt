@@ -1,4 +1,4 @@
-package Presentation.screen
+package Presentation.screen.addCards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class UserCardsViewModel(
+class AddCardsViewModel(
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
 
-    private val _pokemonCard = MutableStateFlow<ApiCard?>(null)
-    val pokemonCard: StateFlow<ApiCard?> = _pokemonCard
+    private val _pokemonCards = MutableStateFlow<List<ApiCard>>(emptyList())
+    val pokemonCards: StateFlow<List<ApiCard>> = _pokemonCards
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -21,16 +21,15 @@ class UserCardsViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    fun fetchPokemonCard(cardId: String) {
+    fun fetchPokemonCards(query: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            _error.value = null
-
-            pokemonRepository.getPokemonCardDetails(cardId)
-                .onSuccess { card ->
-                    _pokemonCard.value = card
+            pokemonRepository.getPokemonCards(query)
+                .onSuccess { pokemonCards ->
+                    _pokemonCards.value = pokemonCards
+                    println(pokemonCards)
                 }
-                .onFailure {exception ->
+                .onFailure { exception ->
                     _error.value = "An error occurred: $exception"
                     println("An error occurred: $exception")
                     exception.printStackTrace()
