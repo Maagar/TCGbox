@@ -1,0 +1,43 @@
+CREATE TABLE Cards(
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    imageSmall TEXT NOT NULL,
+    imageLarge TEXT NOT NULL,
+    setId TEXT NOT NULL,
+    setName TEXT NOT NULL,
+    setReleaseDate TEXT NOT NULL,
+    cardMarketUrl TEXT,
+    trendPriceCents INTEGER,
+    reverseHoloTrendCents INTEGER,
+    addedDate TEXT NOT NULL,
+    boughtPriceCents INTEGER
+);
+
+CREATE INDEX card_set_id_idx ON Cards(setId);
+
+SELECT *
+FROM Cards;
+
+INSERT OR REPLACE INTO Cards(
+    id,
+    name,
+    imageSmall,
+    imageLarge,
+    setId,
+    setName,
+    setReleaseDate,
+    cardMarketUrl,
+    trendPriceCents,
+    reverseHoloTrendCents,
+    addedDate,
+    boughtPriceCents
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+SELECT *
+FROM Cards
+WHERE setId = ?;
+
+SELECT *
+FROM Cards
+WHERE id = ?;

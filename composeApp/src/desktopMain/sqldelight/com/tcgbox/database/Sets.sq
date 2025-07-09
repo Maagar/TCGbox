@@ -1,0 +1,13 @@
+CREATE TABLE Sets(
+    id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    printedTotal INTEGER NOT NULL
+);
+
+getAllSets:
+SELECT Sets.*
+FROM Sets;
+
+insertSet:
+INSERT OR REPLACE INTO Sets(id, name, printedTotal)
+VALUES (?, ?, ?);

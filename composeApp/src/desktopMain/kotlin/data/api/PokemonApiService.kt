@@ -1,11 +1,13 @@
 package data.api
 
 import data.api.model.PokemonCardApiResponse
+import data.api.model.PokemonSetsApiResponse
 import data.api.model.SearchCardsApiResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.parameter
 
 class PokemonApiService(private val client: HttpClient) {
 
@@ -18,8 +20,30 @@ class PokemonApiService(private val client: HttpClient) {
         }.body()
     }
 
-    suspend fun getPokemonCards(query: String): SearchCardsApiResponse {
-        return client.get("$baseUrl/cards?page=1&pageSize=20&q=name:$query&select=id,name,images,set,cardmarket") {
+    suspend fun getPokemonCards(name: String, number: String, setId: String, setName: String): SearchCardsApiResponse {
+        var query = ""
+        if (name.isNotEmpty()) query += "name:\"$name\" "
+        if (number.isNotEmpty()) query += "number:\"$number\" "
+        if (setId.isNotEmpty()) query += "set.id:\"$setId\" " else if (setId.isEmpty() && setName.isNotEmpty()) query += "set.name:\"$setName\" "
+        println("query: $query")
+
+        return client.get("$baseUrl/cards") {
+            parameter("page", 1)
+            parameter("pageSize", 20)
+
+            parameter("q", query)
+
+            parameter("select", "id,name,images,set,cardmarket,number")
+
+            header("X-Api-Key", apiKey)
+            header("X-Api-Key", apiKey)
+        }.body()
+    }
+
+    suspend fun getPokemonSets(): PokemonSetsApiResponse {
+        return client.get("$baseUrl/sets") {
+            parameter("select", "id,name,printedTotal")
+            header("X-Api-Key", apiKey)
             header("X-Api-Key", apiKey)
         }.body()
     }

@@ -36,9 +36,10 @@ data class PokemonCardApiResponse(
 data class ApiCard(
     val id: String,
     val name: String,
+    val number: Int,
     val images: ApiImages,
-    val set: ApiSet,
-    val cardmarket: CardMarket
+    val set: PokemonSet,
+    val cardmarket: CardMarket? = null
 )
 
 @Serializable

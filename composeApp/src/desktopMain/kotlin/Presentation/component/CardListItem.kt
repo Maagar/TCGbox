@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ListItem
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultAlpha
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
@@ -29,7 +32,7 @@ import io.kamel.image.asyncPainterResource
 import util.openURL
 
 @Composable
-fun CardListItem(card: ApiCard, boughtPrice: Long? = null) {
+fun CardListItem(card: ApiCard, icon: Painter, onIconClick: () -> Unit, boughtPrice: Long? = null) {
 
     var showLargeImage by remember { mutableStateOf(false) }
 
@@ -50,7 +53,7 @@ fun CardListItem(card: ApiCard, boughtPrice: Long? = null) {
     ListItem(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         headlineContent = {
-            Text(text = card.name)
+            Text(text = card.name, style = MaterialTheme.typography.titleLarge)
         },
         leadingContent = {
             KamelImage(
@@ -66,33 +69,44 @@ fun CardListItem(card: ApiCard, boughtPrice: Long? = null) {
         },
         trailingContent = {
 
-            Row {
-                Text("${card.cardmarket.prices.trendPrice / 100.0} €")
-                if (boughtPrice != null) {
-                    val priceDifference = card.cardmarket.prices.trendPrice - boughtPrice
-                    val sign = when {
-                        priceDifference > 0 -> "+"
-                        else -> ""
-                    }
-                    Text(
-                        text = " ($sign${priceDifference / 100.0})",
-                        color = when {
-                            priceDifference > 0 -> Color.Green
-                            priceDifference < 0 -> Color.Red
-                            else -> MaterialTheme.colorScheme.onSurface
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (card.cardmarket != null) {
+                    Text("${card.cardmarket.prices.trendPrice / 100.0} €", style = MaterialTheme.typography.bodyLarge)
+                    if (boughtPrice != null) {
+                        val priceDifference = card.cardmarket.prices.trendPrice - boughtPrice
+                        val sign = when {
+                            priceDifference > 0 -> "+"
+                            else -> ""
                         }
-                    )
+                        Text(
+                            text = " ($sign${priceDifference / 100.0})",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = when {
+                                priceDifference > 0 -> Color.Green
+                                priceDifference < 0 -> Color.Red
+                                else -> MaterialTheme.colorScheme.onSurface
+                            }
+                        )
+                    }
+                } else {
+                    Text("N/A", style = MaterialTheme.typography.bodyLarge)
+                }
+                IconButton(onClick = onIconClick) {
+                    Icon(icon, modifier = Modifier.size(28.dp), contentDescription = null)
                 }
             }
 
+
         },
         supportingContent = {
-            Text(
-                text = card.cardmarket.url,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable(onClick = { openURL(card.cardmarket.url) })
-                    .pointerHoverIcon(PointerIcon.Hand)
-            )
+            card.cardmarket?.let {
+                Text(
+                    text = it.url,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable(onClick = { openURL(card.cardmarket.url) })
+                        .pointerHoverIcon(PointerIcon.Hand)
+                )
+            }
         }
     )
 }

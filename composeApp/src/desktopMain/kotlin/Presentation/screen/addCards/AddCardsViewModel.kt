@@ -12,22 +12,28 @@ class AddCardsViewModel(
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
 
-    private val _pokemonCards = MutableStateFlow<List<ApiCard>>(emptyList())
-    val pokemonCards: StateFlow<List<ApiCard>> = _pokemonCards
-
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    fun fetchPokemonCards(query: String) {
+    private val _pokemonCards = MutableStateFlow<List<ApiCard>>(emptyList())
+    val pokemonCards: StateFlow<List<ApiCard>> = _pokemonCards
+
+    private val _pokemonSets = MutableStateFlow<List<com.tcgbox.database.Sets>>(emptyList())
+    val pokemonSets: StateFlow<List<com.tcgbox.database.Sets>> = _pokemonSets
+
+    init {
+        fetchPokemonSets()
+    }
+
+    fun fetchPokemonCards(name: String, number: String, setId: String, setName: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            pokemonRepository.getPokemonCards(query)
+            pokemonRepository.getPokemonCards(name, number, setId, setName)
                 .onSuccess { pokemonCards ->
                     _pokemonCards.value = pokemonCards
-                    println(pokemonCards)
                 }
                 .onFailure { exception ->
                     _error.value = "An error occurred: $exception"
@@ -35,6 +41,29 @@ class AddCardsViewModel(
                     exception.printStackTrace()
                 }
             _isLoading.value = false
+        }
+    }
+
+    fun fetchPokemonSets() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            pokemonRepository.getLocalPokemonSets()
+                .onSuccess { sets ->
+                    _pokemonSets.value = sets
+                }.onFailure { exception ->
+                    _error.value = "An error occurred: $exception"
+                }
+        }
+    }
+
+    fun refreshPokemonSets() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            pokemonRepository.getPokemonSets()
+                .onSuccess { fetchPokemonSets() }
+                .onFailure { exception ->
+                    _error.value = "An error occurred: $exception"
+                }
         }
     }
 }

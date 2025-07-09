@@ -83,8 +83,10 @@ compose.desktop {
 
 sqldelight {
     databases {
-        create("CardDatabase") {
-            packageName = "com.tcgbox"
+        create("AppDatabase") {
+            packageName = "com.tcgbox.database"
+            srcDirs.setFrom("src/desktopMain/sqldelight")
+
         }
     }
 }

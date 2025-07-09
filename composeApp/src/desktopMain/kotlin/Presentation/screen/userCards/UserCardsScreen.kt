@@ -7,8 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import Presentation.screen.userCards.component.CardList
-import Presentation.screen.userCards.component.CardSearchBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import org.koin.compose.koinInject
@@ -24,13 +22,7 @@ fun UserCardsScreen() {
     val error by userCardsViewModel.error.collectAsState()
 
     Column {
-        CardSearchBar(query, onQueryChange = {})
         CardList()
-        Button(onClick = {
-            userCardsViewModel.fetchPokemonCard("xy1-1")
-        }) {
-            Text("fetch")
-        }
         pokemonCard?.let { card ->
             Column {
                 Text("Nazwa karty: ${card.name}")
