@@ -2,6 +2,7 @@ package Presentation.screen.addCards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tcgbox.database.Cards
 import data.api.model.ApiCard
 import data.repository.PokemonRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,6 +54,7 @@ class AddCardsViewModel(
                 }.onFailure { exception ->
                     _error.value = "An error occurred: $exception"
                 }
+            _isLoading.value = false
         }
     }
 
@@ -64,6 +66,20 @@ class AddCardsViewModel(
                 .onFailure { exception ->
                     _error.value = "An error occurred: $exception"
                 }
+            _isLoading.value = false
+        }
+    }
+
+    fun insertCard(cards: Cards, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            pokemonRepository.insertPokemonCard(cards)
+                .onSuccess { onResult(true) }
+                .onFailure { exception ->
+                    println(exception)
+                    _error.value = "An error occurred: $exception"
+                    onResult(false) }
+            _isLoading.value = false
         }
     }
 }

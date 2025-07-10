@@ -53,7 +53,11 @@ fun AddCardsScreen() {
         }
     }
     if (showDialog && selectedCard != null) {
-        AddCardPopUp(selectedCard!!, onDismiss = { showDialog = false })
+        AddCardPopUp(selectedCard!!, onDismiss = { showDialog = false }, onAddCard = { cards, onResult ->
+            addCardsViewModel.insertCard(cards) { success ->
+                onResult(success)
+            }
+        })
     }
 
 

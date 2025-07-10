@@ -1,6 +1,7 @@
 package data.repository
 
 import com.tcgbox.database.AppDatabase
+import com.tcgbox.database.Cards
 import data.api.PokemonApiService
 import data.api.model.ApiCard
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +49,27 @@ class PokemonRepository(
         return runCatching {
             withContext(Dispatchers.IO) {
                 appDatabase.setsQueries.getAllSets().executeAsList()
+            }
+        }
+    }
+
+    suspend fun insertPokemonCard(cards: Cards): Result<Unit> {
+        return runCatching {
+            withContext(Dispatchers.IO) {
+                appDatabase.cardsQueries.insertCard(
+                    cardId = cards.cardId,
+                    name = cards.name,
+                    imageSmall = cards.imageSmall,
+                    imageLarge = cards.imageLarge,
+                    setId = cards.setId,
+                    setName = cards.setName,
+                    cardMarketUrl = cards.cardMarketUrl,
+                    trendPriceCents = cards.trendPriceCents,
+                    reverseHoloTrendCents = cards.reverseHoloTrendCents,
+                    addedDate = cards.addedDate,
+                    boughtPriceCents = cards.boughtPriceCents,
+                    isReverseHolo = cards.isReverseHolo
+                )
             }
         }
     }
