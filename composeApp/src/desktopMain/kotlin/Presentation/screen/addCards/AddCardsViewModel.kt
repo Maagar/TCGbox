@@ -25,21 +25,60 @@ class AddCardsViewModel(
     private val _pokemonSets = MutableStateFlow<List<com.tcgbox.database.Sets>>(emptyList())
     val pokemonSets: StateFlow<List<com.tcgbox.database.Sets>> = _pokemonSets
 
+    private var currentPage = 1
+    private var currentSearchName: String = ""
+    private var currentSearchNumber: String = ""
+    private var currentSearchSetId: String = ""
+    private var currentSearchSetName: String = ""
+    private val _canLoadMore = MutableStateFlow(true)
+    val canLoadMore: StateFlow<Boolean> = _canLoadMore
+
     init {
         fetchPokemonSets()
     }
 
-    fun fetchPokemonCards(name: String, number: String, setId: String, setName: String) {
+    fun searchAndFetchCards(name: String, number: String, setId: String, setName: String) {
+        currentSearchName = name
+        currentSearchNumber = number
+        currentSearchSetId = setId
+        currentSearchSetName = setName
+        currentPage = 1
+        _canLoadMore.value = true
+        _pokemonCards.value = emptyList()
+        fetchPokemonCardsInternal(name, number, setId, setName, currentPage)
+    }
+
+    fun loadNextPage() {
+        if (isLoading.value || !canLoadMore.value) return
+
+        currentPage++
+        fetchPokemonCardsInternal(
+            currentSearchName,
+            currentSearchNumber,
+            currentSearchSetId,
+            currentSearchSetName,
+            currentPage
+        )
+    }
+
+    private fun fetchPokemonCardsInternal(name: String, number: String, setId: String, setName: String, page: Int) {
         viewModelScope.launch {
             _isLoading.value = true
-            pokemonRepository.getPokemonCards(name, number, setId, setName)
-                .onSuccess { pokemonCards ->
-                    _pokemonCards.value = pokemonCards
+            pokemonRepository.getPokemonCards(name, number, setId, setName, page)
+                .onSuccess { searchResult ->
+                    val newCards = searchResult
+                    if (page == 1) {
+                        _pokemonCards.value = newCards
+                    } else {
+                        _pokemonCards.value = _pokemonCards.value + newCards
+                    }
+                    _canLoadMore.value = newCards.size == 50
                 }
                 .onFailure { exception ->
                     _error.value = "An error occurred: $exception"
                     println("An error occurred: $exception")
                     exception.printStackTrace()
+                    _canLoadMore.value = false
                 }
             _isLoading.value = false
         }

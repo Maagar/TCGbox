@@ -2,6 +2,7 @@ CREATE TABLE Cards(
     id INTEGER NOT NULL PRIMARY KEY,
     cardId TEXT NOT NULL,
     name TEXT NOT NULL,
+    number TEXT NOT NULL,
     imageSmall TEXT NOT NULL,
     imageLarge TEXT NOT NULL,
     setId TEXT NOT NULL,
@@ -11,7 +12,7 @@ CREATE TABLE Cards(
     reverseHoloTrendCents INTEGER,
     addedDate TEXT NOT NULL,
     boughtPriceCents INTEGER,
-    isReverseHolo INTEGER
+    isReverseHolo INTEGER NOT NULL
 );
 
 CREATE INDEX card_set_id_idx ON Cards(setId);
@@ -24,6 +25,7 @@ insertCard:
 INSERT OR REPLACE INTO Cards(
     cardId,
     name,
+    number,
     imageSmall,
     imageLarge,
     setId,
@@ -35,7 +37,7 @@ INSERT OR REPLACE INTO Cards(
     boughtPriceCents,
     isReverseHolo
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 getCardBySetId:
 SELECT *

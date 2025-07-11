@@ -20,7 +20,13 @@ class PokemonApiService(private val client: HttpClient) {
         }.body()
     }
 
-    suspend fun getPokemonCards(name: String, number: String, setId: String, setName: String): SearchCardsApiResponse {
+    suspend fun getPokemonCards(
+        name: String,
+        number: String,
+        setId: String,
+        setName: String,
+        page: Int
+    ): SearchCardsApiResponse {
         var query = ""
         if (name.isNotEmpty()) query += "name:\"$name\" "
         if (number.isNotEmpty()) query += "number:\"$number\" "
@@ -28,8 +34,8 @@ class PokemonApiService(private val client: HttpClient) {
         println("query: $query")
 
         return client.get("$baseUrl/cards") {
-            parameter("page", 1)
-            parameter("pageSize", 20)
+            parameter("page", page)
+            parameter("pageSize", 50)
 
             parameter("q", query)
 

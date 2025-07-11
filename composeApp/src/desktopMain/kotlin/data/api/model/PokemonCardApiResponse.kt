@@ -36,7 +36,7 @@ data class PokemonCardApiResponse(
 data class ApiCard(
     val id: String,
     val name: String,
-    val number: Int,
+    val number: String,
     val images: ApiImages,
     val set: PokemonSet,
     val cardmarket: CardMarket? = null

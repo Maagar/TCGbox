@@ -18,9 +18,9 @@ class PokemonRepository(
         }
     }
 
-    suspend fun getPokemonCards(name: String, number: String, setId: String, setName: String): Result<List<ApiCard>> {
+    suspend fun getPokemonCards(name: String, number: String, setId: String, setName: String, page: Int): Result<List<ApiCard>> {
         return runCatching {
-            pokemonApiService.getPokemonCards(name, number, setId, setName).data
+            pokemonApiService.getPokemonCards(name, number, setId, setName, page).data
         }
     }
 
@@ -36,8 +36,6 @@ class PokemonRepository(
                             name = pokemonSet.name,
                             printedTotal = pokemonSet.printedTotal.toLong()
                         )
-                        println(pokemonSet)
-
                     }
                 }
                 Unit
@@ -59,6 +57,7 @@ class PokemonRepository(
                 appDatabase.cardsQueries.insertCard(
                     cardId = cards.cardId,
                     name = cards.name,
+                    number = cards.number,
                     imageSmall = cards.imageSmall,
                     imageLarge = cards.imageLarge,
                     setId = cards.setId,
@@ -70,6 +69,14 @@ class PokemonRepository(
                     boughtPriceCents = cards.boughtPriceCents,
                     isReverseHolo = cards.isReverseHolo
                 )
+            }
+        }
+    }
+
+    suspend fun getAllLocalCards(): Result<List<com.tcgbox.database.Cards>> {
+        return runCatching {
+            withContext(Dispatchers.IO) {
+                appDatabase.cardsQueries.getCards().executeAsList()
             }
         }
     }

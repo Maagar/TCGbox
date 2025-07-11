@@ -158,6 +158,7 @@ fun AddCardPopUp(card: ApiCard, onDismiss: () -> Unit, onAddCard: (Cards, (Boole
                                     id = 0,
                                     cardId = card.id,
                                     name = card.name,
+                                    number = card.number,
                                     imageSmall = card.images.small,
                                     imageLarge = card.images.large,
                                     setId = card.set.id,

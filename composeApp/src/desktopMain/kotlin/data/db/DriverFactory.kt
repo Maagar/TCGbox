@@ -7,7 +7,6 @@ import java.util.Properties
 
 class DriverFactory {
     fun createDriver(): SqlDriver {
-        val databasePath = "jdbc:tcgbox:database.db"
         val driver: SqlDriver = JdbcSqliteDriver("jdbc:sqlite:test.db", Properties(), AppDatabase.Schema)
 
         return driver
