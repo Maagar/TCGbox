@@ -1,8 +1,8 @@
-package Presentation.screen.addCards
+package presentation.screen.addCards
 
-import Presentation.screen.addCards.component.CardListItem
-import Presentation.screen.addCards.component.AddCardPopUp
-import Presentation.component.CardSearchBar
+import presentation.screen.addCards.component.CardListItem
+import presentation.screen.addCards.component.AddCardPopUp
+import presentation.component.CardSearchBar
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -73,7 +73,8 @@ fun AddCardsScreen() {
             },
             {
                 addCardsViewModel.refreshPokemonSets()
-            })
+            },
+            showSearchButton = true)
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxHeight(), state = listState) {
                 items(pokemonCards) { card ->

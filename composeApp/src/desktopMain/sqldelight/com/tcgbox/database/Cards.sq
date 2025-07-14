@@ -52,3 +52,10 @@ WHERE cardId = ?;
 removeCardById:
 DELETE FROM Cards
 WHERE id = ?;
+
+updateCard:
+UPDATE Cards
+SET addedDate = :newAddedDate,
+    boughtPriceCents = :newPrice,
+    isReverseHolo = :isReverseHolo
+WHERE id = :cardId;

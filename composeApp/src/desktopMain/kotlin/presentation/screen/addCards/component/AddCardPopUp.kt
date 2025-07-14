@@ -1,4 +1,4 @@
-package Presentation.screen.addCards.component
+package presentation.screen.addCards.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -151,7 +151,7 @@ fun AddCardPopUp(card: ApiCard, onDismiss: () -> Unit, onAddCard: (Cards, (Boole
                         Spacer(modifier = Modifier.weight(1f))
 
                         FloatingActionButton(modifier = Modifier.padding(vertical = 8.dp), onClick = {
-                            if (selectedDateText.isEmpty() || boughtPrice.isEmpty()) {
+                            if (selectedDateText.isEmpty() || selectedDateText == defaultDateText|| boughtPrice.isEmpty()) {
                                 showError = true
                             } else {
                                 val cardToAdd = Cards(

@@ -1,4 +1,4 @@
-package Presentation.navigation
+package presentation.navigation
 
 object AppRoutes {
     const val USER_CARDS = "userCards"

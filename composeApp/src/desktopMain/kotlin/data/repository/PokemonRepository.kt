@@ -18,7 +18,13 @@ class PokemonRepository(
         }
     }
 
-    suspend fun getPokemonCards(name: String, number: String, setId: String, setName: String, page: Int): Result<List<ApiCard>> {
+    suspend fun getPokemonCards(
+        name: String,
+        number: String,
+        setId: String,
+        setName: String,
+        page: Int
+    ): Result<List<ApiCard>> {
         return runCatching {
             pokemonApiService.getPokemonCards(name, number, setId, setName, page).data
         }
@@ -29,7 +35,7 @@ class PokemonRepository(
             val apiResponse = pokemonApiService.getPokemonSets().data
 
             withContext(Dispatchers.IO) {
-                appDatabase.setsQueries.transaction{
+                appDatabase.setsQueries.transaction {
                     apiResponse.forEach { pokemonSet ->
                         appDatabase.setsQueries.insertSet(
                             id = pokemonSet.id,
@@ -38,7 +44,6 @@ class PokemonRepository(
                         )
                     }
                 }
-                Unit
             }
         }
     }
@@ -77,6 +82,22 @@ class PokemonRepository(
         return runCatching {
             withContext(Dispatchers.IO) {
                 appDatabase.cardsQueries.getCards().executeAsList()
+            }
+        }
+    }
+
+    suspend fun deleteCard(id: Long): Result<Unit> {
+        return runCatching {
+            withContext(Dispatchers.IO) {
+                appDatabase.cardsQueries.removeCardById(id)
+            }
+        }
+    }
+
+    suspend fun updateCard(date: String, boughtPrice: Long?, isReverseHolo: Long, cardId: Long): Result<Unit> {
+        return runCatching {
+            withContext(Dispatchers.IO) {
+                appDatabase.cardsQueries.updateCard(date, boughtPrice, isReverseHolo, cardId)
             }
         }
     }

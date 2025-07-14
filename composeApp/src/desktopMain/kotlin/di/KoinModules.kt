@@ -1,7 +1,7 @@
 package di
 
-import Presentation.screen.addCards.AddCardsViewModel
-import Presentation.screen.userCards.UserCardsViewModel
+import presentation.screen.addCards.AddCardsViewModel
+import presentation.screen.userCards.UserCardsViewModel
 import data.api.KtorClient
 import data.api.PokemonApiService
 import data.db.DriverFactory
@@ -11,6 +11,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.PrintLogger
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import presentation.screen.settings.SettingsViewModel
 
 val appModule = module {
     //HTTP
@@ -25,6 +26,7 @@ val appModule = module {
     //ViewModels
     viewModel { UserCardsViewModel(get()) }
     viewModel { AddCardsViewModel(get()) }
+    viewModel { SettingsViewModel(get()) }
 }
 
 fun initializeKoin() {

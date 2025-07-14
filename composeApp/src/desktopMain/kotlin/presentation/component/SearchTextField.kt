@@ -1,9 +1,10 @@
-package Presentation.component
+package presentation.component
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -12,7 +13,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.painterResource
+import tcgbox.composeapp.generated.resources.Res
+import tcgbox.composeapp.generated.resources.close
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +61,14 @@ fun SearchTextField(
             },
         leadingIcon = {
             Icon(leadingIcon, contentDescription = null)
+        },
+        trailingIcon = {
+            if (value.isNotEmpty()) {
+                IconButton(modifier = Modifier.pointerHoverIcon(PointerIcon.Hand), onClick = { onValueChange("") }) {
+                    Icon(painterResource(Res.drawable.close), contentDescription = null)
+                }
+            }
         }
+
     )
 }

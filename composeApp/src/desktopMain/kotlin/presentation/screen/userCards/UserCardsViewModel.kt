@@ -1,8 +1,9 @@
-package Presentation.screen.userCards
+package presentation.screen.userCards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tcgbox.database.Cards
+import com.tcgbox.database.Sets
 import data.api.model.ApiCard
 import data.repository.PokemonRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +20,8 @@ class UserCardsViewModel(
     private val _pokemonCard = MutableStateFlow<ApiCard?>(null)
     val pokemonCard: StateFlow<ApiCard?> = _pokemonCard
 
-    private val _pokemonSets = MutableStateFlow<List<com.tcgbox.database.Sets>>(emptyList())
-    val pokemonSets: StateFlow<List<com.tcgbox.database.Sets>> = _pokemonSets
+    private val _pokemonSets = MutableStateFlow<List<Sets>>(emptyList())
+    val pokemonSets: StateFlow<List<Sets>> = _pokemonSets
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -68,6 +69,33 @@ class UserCardsViewModel(
                 .onFailure { exception ->
                     _error.value = "An error occurred: $exception"
                 }
+            _isLoading.value = false
+        }
+    }
+
+    fun deletePokemonCard(id: Long) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            pokemonRepository.deleteCard(id)
+                .onSuccess { fetchLocalPokemonCards() }
+                .onFailure { exception ->
+                    _error.value = "An error occurred: $exception"
+                }
+        }
+    }
+
+    fun updatePokemonCard(card: Cards) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            pokemonRepository.updateCard(
+                date = card.addedDate,
+                boughtPrice = card.boughtPriceCents,
+                isReverseHolo = card.isReverseHolo,
+                cardId = card.id
+            ).onSuccess { fetchLocalPokemonCards() }
+            .onFailure { exception ->
+                _error.value = "An error occurred: $exception"
+            }
             _isLoading.value = false
         }
     }

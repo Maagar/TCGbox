@@ -1,4 +1,4 @@
-package Presentation.screen.addCards
+package presentation.screen.addCards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,7 +1,7 @@
 package org.example.project
 
-import Presentation.component.AppNavigationRail
-import Presentation.navigation.AppNavHost
+import presentation.component.AppNavigationRail
+import presentation.navigation.AppNavHost
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*

@@ -1,6 +1,6 @@
-package Presentation.component
+package presentation.component
 
-import Presentation.navigation.AppRoutes
+import presentation.navigation.AppRoutes
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
@@ -16,6 +16,7 @@ import org.jetbrains.compose.resources.painterResource
 import tcgbox.composeapp.generated.resources.Res
 import tcgbox.composeapp.generated.resources.home
 import tcgbox.composeapp.generated.resources.playing_cards
+import tcgbox.composeapp.generated.resources.settings
 
 @Composable
 fun AppNavigationRail(
@@ -51,6 +52,20 @@ fun AppNavigationRail(
             },
             icon = { Icon(painter = painterResource(Res.drawable.playing_cards), contentDescription = null) },
             label = { Text("Dodaj karty") },
+        )
+
+        NavigationRailItem(
+            selected = currentRoute == AppRoutes.SETTINGS,
+            onClick = {
+                if (currentRoute != AppRoutes.SETTINGS) {
+                    navController.navigate(AppRoutes.SETTINGS) {
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            },
+            icon = { Icon(painter = painterResource(Res.drawable.settings), contentDescription = null) },
+            label = { Text("Ustawienia") },
         )
         Spacer(Modifier.weight(1f))
     }

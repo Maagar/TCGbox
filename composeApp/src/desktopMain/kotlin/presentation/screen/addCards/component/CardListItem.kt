@@ -1,4 +1,4 @@
-package Presentation.screen.userCards.component
+package presentation.screen.addCards.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -25,21 +25,20 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
-import com.tcgbox.database.Cards
+import data.api.model.ApiCard
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import util.openURL
 
 @Composable
-fun LocalCardListItem(card: Cards, icon: Painter, onIconClick: () -> Unit) {
+fun CardListItem(card: ApiCard, icon: Painter, onIconClick: () -> Unit, boughtPrice: Long? = null) {
 
     var showLargeImage by remember { mutableStateOf(false) }
 
     if (showLargeImage) {
-        Popup(onDismissRequest = { showLargeImage = false }, properties = PopupProperties(focusable = true)) {
+        Popup(onDismissRequest = { showLargeImage = false }) {
             KamelImage(
-                { asyncPainterResource(data = card.imageLarge) },
+                { asyncPainterResource(data = card.images.large) },
                 contentDescription = null,
                 modifier = Modifier.padding(40.dp).clickable { showLargeImage = false },
                 alignment = Alignment.Center,
@@ -57,7 +56,7 @@ fun LocalCardListItem(card: Cards, icon: Painter, onIconClick: () -> Unit) {
         },
         leadingContent = {
             KamelImage(
-                { asyncPainterResource(data = card.imageSmall) },
+                { asyncPainterResource(data = card.images.small) },
                 contentDescription = null,
                 modifier = Modifier.size(72.dp).clickable(onClick = { showLargeImage = true })
                     .pointerHoverIcon(PointerIcon.Hand),
@@ -69,15 +68,13 @@ fun LocalCardListItem(card: Cards, icon: Painter, onIconClick: () -> Unit) {
         },
         trailingContent = {
 
-            val marketPrice = if (card.isReverseHolo == 1L) card.reverseHoloTrendCents else card.trendPriceCents
-
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (card.trendPriceCents != null) {
-                    Text("${marketPrice?.div(100.0)} €", style = MaterialTheme.typography.bodyLarge)
-                    if (card.boughtPriceCents != null) {
-                        val priceDifference = marketPrice?.minus(card.boughtPriceCents)
+                if (card.cardmarket != null) {
+                    Text("${card.cardmarket.prices.trendPrice / 100.0} €", style = MaterialTheme.typography.bodyLarge)
+                    if (boughtPrice != null) {
+                        val priceDifference = card.cardmarket.prices.trendPrice - boughtPrice
                         val sign = when {
-                            priceDifference!! > 0 -> "+"
+                            priceDifference > 0 -> "+"
                             else -> ""
                         }
                         Text(
@@ -101,11 +98,11 @@ fun LocalCardListItem(card: Cards, icon: Painter, onIconClick: () -> Unit) {
 
         },
         supportingContent = {
-            card.cardMarketUrl?.let {
+            card.cardmarket?.let {
                 Text(
-                    text = card.cardMarketUrl,
+                    text = it.url,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable(onClick = { openURL(card.cardMarketUrl) })
+                    modifier = Modifier.clickable(onClick = { openURL(card.cardmarket.url) })
                         .pointerHoverIcon(PointerIcon.Hand)
                 )
             }

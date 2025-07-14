@@ -1,14 +1,16 @@
-package Presentation.component
+package presentation.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.VerticalDivider
@@ -29,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.tcgbox.database.Sets
 import org.jetbrains.compose.resources.painterResource
 import tcgbox.composeapp.generated.resources.Res
-import tcgbox.composeapp.generated.resources.refresh
+import tcgbox.composeapp.generated.resources.close
 import tcgbox.composeapp.generated.resources.search
 import tcgbox.composeapp.generated.resources.tag
 import tcgbox.composeapp.generated.resources.view_carousel
@@ -41,6 +43,7 @@ fun CardSearchBar(
     onSearchTriggered: (String, String, String, String) -> Unit,
     refreshSets: () -> Unit,
     liveSearchEnabled: Boolean = false,
+    showSearchButton: Boolean = false,
 ) {
     var name by rememberSaveable() { mutableStateOf("") }
     var number by rememberSaveable() { mutableStateOf("") }
@@ -135,13 +138,13 @@ fun CardSearchBar(
                     Icon(painterResource(Res.drawable.view_carousel), contentDescription = null)
                 },
                 trailingIcon = {
-                    Icon(
-                        painterResource(Res.drawable.refresh),
-                        modifier = Modifier.padding(4.dp).pointerHoverIcon(PointerIcon.Hand).clickable {
-                            refreshSets()
-                        },
-                        contentDescription = null
-                    )
+                    if (setQuery.isNotEmpty()) {
+                        IconButton(
+                            modifier = Modifier.pointerHoverIcon(PointerIcon.Hand),
+                            onClick = { setQuery = "" }) {
+                            Icon(painterResource(Res.drawable.close), contentDescription = null)
+                        }
+                    }
                 })
             if (showSuggestions && filteredSets.isNotEmpty()) {
                 SetSuggestionsPopup(
@@ -158,5 +161,14 @@ fun CardSearchBar(
                 )
             }
         }
+        if (showSearchButton) {
+            FloatingActionButton(
+                modifier = Modifier.padding(8.dp),
+                containerColor = MaterialTheme.colorScheme.tertiary,
+                onClick = { triggerSearch() }) {
+                Icon(painterResource(Res.drawable.search), contentDescription = null)
+            }
+        }
+
     }
 }
